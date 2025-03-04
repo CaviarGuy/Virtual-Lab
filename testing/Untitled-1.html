@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Chemistry Lab</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="lab">
+        <div id="beaker1" class="beaker" draggable="true" ondragstart="drag(event)">
+            <div class="label">HCl Solution</div>
+            <div class="fluid" id="fluid1"></div>
+        </div>
+        <div id="beaker2" class="beaker" draggable="true" ondragstart="drag(event)">
+            <div class="label">NaOH Solution</div>
+            <div class="fluid" id="fluid2"></div>
+        </div>
+        <div id="finalBeaker" class="beaker" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <div class="label">Final Solution</div>
+            <div class="fluid" id="finalFluid"></div>
+        </div>
+    </div>
+
+    <div id="popupMessage" class="popup">Reaction Successful</div>
+
+    <script src="script.js"></script>
+</body>
+</html>
