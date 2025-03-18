@@ -5,8 +5,10 @@ canvas.width = 600;
 canvas.height = 300;
 
 let magnets = [
-    { x: 200, y: 130, width: 80, height: 40, pole: "N", isDragging: false },
-    { x: 280, y: 130, width: 80, height: 40, pole: "S", isDragging: false }
+    { x: 100, y: 120, width: 80, height: 40, pole: "N", isDragging: false },
+    { x: 250, y: 120, width: 80, height: 40, pole: "N", isDragging: false },
+    { x: 400, y: 120, width: 80, height: 40, pole: "S", isDragging: false },
+    { x: 550, y: 120, width: 80, height: 40, pole: "S", isDragging: false }
 ];
 
 let selectedMagnet = null;
@@ -22,25 +24,34 @@ function drawMagnet(magnet) {
 }
 
 function checkInteraction() {
-    let [m1, m2] = magnets;
-    let distance = Math.abs(m1.x + m1.width - m2.x);
+    for (let i = 0; i < magnets.length; i++) {
+        for (let j = i + 1; j < magnets.length; j++) {
+            let m1 = magnets[i];
+            let m2 = magnets[j];
 
-    if (distance < 20) {
-        if ((m1.pole === "N" && m2.pole === "S") || (m1.pole === "S" && m2.pole === "N")) {
-            // Attract: Snap together
-            if (m1.x < m2.x) {
-                m2.x = m1.x + m1.width;
-            } else {
-                m1.x = m2.x + m2.width;
-            }
-        } else {
-            // Repel: Push away
-            if (m1.x < m2.x) {
-                m1.x -= 10;
-                m2.x += 10;
-            } else {
-                m1.x += 10;
-                m2.x -= 10;
+            let distanceX = Math.abs(m1.x - m2.x);
+            let distanceY = Math.abs(m1.y - m2.y);
+
+            if (distanceX < 90 && distanceY < 50) {  // Close enough to interact
+                if (m1.pole === m2.pole) {
+                    // Repel: Move apart
+                    if (m1.x < m2.x) {
+                        m1.x -= 10;
+                        m2.x += 10;
+                    } else {
+                        m1.x += 10;
+                        m2.x -= 10;
+                    }
+                } else {
+                    // Attract: Move together
+                    if (m1.x < m2.x) {
+                        m1.x += 5;
+                        m2.x -= 5;
+                    } else {
+                        m1.x -= 5;
+                        m2.x += 5;
+                    }
+                }
             }
         }
     }
@@ -82,8 +93,8 @@ canvas.addEventListener("mousemove", (e) => {
 canvas.addEventListener("mouseup", () => {
     if (selectedMagnet) {
         selectedMagnet.isDragging = false;
-        selectedMagnet = null;
         checkInteraction();
+        selectedMagnet = null;
     }
 });
 
