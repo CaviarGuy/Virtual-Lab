@@ -4,11 +4,16 @@ const ctx = canvas.getContext("2d");
 canvas.width = 600;
 canvas.height = 300;
 
+// Smooth background
+canvas.style.background = "linear-gradient(to right, #f0f0f0, #d9e2f3)";
+canvas.style.border = "2px solid black";
+canvas.style.borderRadius = "10px";
+
 let magnets = [
-    { x: 100, y: 120, width: 80, height: 40, pole: "N", isDragging: false },
-    { x: 250, y: 120, width: 80, height: 40, pole: "N", isDragging: false },
-    { x: 400, y: 120, width: 80, height: 40, pole: "S", isDragging: false },
-    { x: 550, y: 120, width: 80, height: 40, pole: "S", isDragging: false }
+    { x: 100, y: 120, width: 80, height: 40, pole: "N", isDragging: false, vx: 0 },
+    { x: 250, y: 120, width: 80, height: 40, pole: "N", isDragging: false, vx: 0 },
+    { x: 400, y: 120, width: 80, height: 40, pole: "S", isDragging: false, vx: 0 },
+    { x: 550, y: 120, width: 80, height: 40, pole: "S", isDragging: false, vx: 0 }
 ];
 
 let selectedMagnet = null;
@@ -16,7 +21,12 @@ let offsetX = 0, offsetY = 0;
 
 function drawMagnet(magnet) {
     ctx.fillStyle = magnet.pole === "N" ? "red" : "blue";
-    ctx.fillRect(magnet.x, magnet.y, magnet.width, magnet.height);
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.roundRect(magnet.x, magnet.y, magnet.width, magnet.height, 10);
+    ctx.fill();
+    ctx.stroke();
     
     ctx.fillStyle = "white";
     ctx.font = "20px Arial";
@@ -34,22 +44,24 @@ function checkInteraction() {
 
             if (distanceX < 90 && distanceY < 50) {  // Close enough to interact
                 if (m1.pole === m2.pole) {
-                    // Repel: Move apart
+                    // Repel: Move apart with smooth effect
+                    let force = 1.5; 
                     if (m1.x < m2.x) {
-                        m1.x -= 10;
-                        m2.x += 10;
+                        m1.vx -= force;
+                        m2.vx += force;
                     } else {
-                        m1.x += 10;
-                        m2.x -= 10;
+                        m1.vx += force;
+                        m2.vx -= force;
                     }
                 } else {
-                    // Attract: Move together
+                    // Attract: Move together with smooth effect
+                    let force = 0.5;
                     if (m1.x < m2.x) {
-                        m1.x += 5;
-                        m2.x -= 5;
+                        m1.vx += force;
+                        m2.vx -= force;
                     } else {
-                        m1.x -= 5;
-                        m2.x += 5;
+                        m1.vx -= force;
+                        m2.vx += force;
                     }
                 }
             }
@@ -59,7 +71,15 @@ function checkInteraction() {
 
 function update() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    magnets.forEach(drawMagnet);
+    
+    magnets.forEach((magnet) => {
+        if (!magnet.isDragging) {
+            magnet.x += magnet.vx;
+            magnet.vx *= 0.9; // Friction to slow down movement
+        }
+        drawMagnet(magnet);
+    });
+
     requestAnimationFrame(update);
 }
 
