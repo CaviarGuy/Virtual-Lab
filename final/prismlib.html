@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prism Light Dispersion</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; background: #181b2a; }
+        #toggleBtn {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <button id="toggleBtn">Turn Torch ON</button>
+<script>
+    let scene, camera, renderer, prism, torch, torchLight, lightBeam, dispersionBeams = [], torchOn = false;
+    let mouseX = 0, mouseY = 0;
+
+    function init() {
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Prism (Single Triangular Face Centered)
+        const prismGeometry = new THREE.ConeGeometry(3, 5, 3);
+        const prismMaterial = new THREE.MeshPhongMaterial({ color: 0x8888ff, transparent: true, opacity: 0.6 });
+        prism = new THREE.Mesh(prismGeometry, prismMaterial);
+        prism.position.set(0, 0, 0);
+        scene.add(prism);
+
+        // Torch (More Realistic)
+        const torchGeometry = new THREE.CylinderGeometry(0.4, 0.6, 4);
+        const torchMaterial = new THREE.MeshStandardMaterial({ color: 0xffa500, metalness: 0.6, roughness: 0.3 });
+        torch = new THREE.Mesh(torchGeometry, torchMaterial);
+        torch.position.set(-8, 0, 0);
+        torch.rotation.z = Math.PI / 2;
+        scene.add(torch);
+
+        // Torch Light
+        torchLight = new THREE.SpotLight(0xffffff, 0);
+        torchLight.position.set(-7, 0, 0);
+        torchLight.angle = Math.PI / 10;
+        torchLight.target = prism;
+        scene.add(torchLight);
+
+        // Light Beam (Longer and Focused White Beam)
+        const beamGeometry = new THREE.PlaneGeometry(15, 0.3);
+        const beamMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0 });
+        lightBeam = new THREE.Mesh(beamGeometry, beamMaterial);
+        lightBeam.position.set(-5, 0, 0);
+        scene.add(lightBeam);
+
+        // Dispersion (Now going DOWNWARD)
+        const colors = [0xff0000, 0xff8000, 0xffff00, 0x00ff00, 0x00ffff, 0x0000ff, 0x8000ff];
+        for (let i = 0; i < 7; i++) {
+            let beam = new THREE.Mesh(
+                new THREE.PlaneGeometry(10, 0.3), 
+                new THREE.MeshBasicMaterial({ color: colors[i], transparent: true, opacity: 0 })
+            );
+            beam.position.set(3, -(i * 0.5) - 1.5, 0);  // Move below prism
+            beam.rotation.z = -Math.PI / 8;  // Angle it downward
+            scene.add(beam);
+            dispersionBeams.push(beam);
+        }
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0x404040);
+        scene.add(ambientLight);
+        const prismLight = new THREE.PointLight(0xffffff, 1);
+        prismLight.position.set(0, 3, 3);
+        scene.add(prismLight);
+
+        camera.position.set(0, 0, 15);
+        animate();
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        torch.position.x = mouseX - 8;
+        torch.position.y = mouseY - 2;
+        torchLight.position.x = mouseX - 7;
+        torchLight.position.y = mouseY - 2;
+        lightBeam.position.x = mouseX - 5;
+        lightBeam.position.y = mouseY - 2;
+
+        // Check if beam passes through the prism
+        let beamHitsPrism = mouseX > -2 && mouseX < 2 && mouseY > -2 && mouseY < 2;
+        if (torchOn && beamHitsPrism) {
+            dispersionBeams.forEach((beam, index) => {
+                gsap.to(beam.material, { opacity: 0.8, duration: 0.5, delay: index * 0.1 });
+            });
+        } else {
+            dispersionBeams.forEach((beam) => {
+                gsap.to(beam.material, { opacity: 0, duration: 0.5 });
+            });
+        }
+        
+        renderer.render(scene, camera);
+    }
+
+    function toggleTorch() {
+        torchOn = !torchOn;
+        document.getElementById("toggleBtn").innerText = torchOn ? "Turn Torch OFF" : "Turn Torch ON";
+        gsap.to(torchLight, { intensity: torchOn ? 2.5 : 0, duration: 0.5 });
+        gsap.to(lightBeam.material, { opacity: torchOn ? 0.8 : 0, duration: 0.5 });
+    }
+
+    document.getElementById("toggleBtn").addEventListener("click", toggleTorch);
+    document.addEventListener("mousemove", (event) => {
+        mouseX = (event.clientX / window.innerWidth) * 10 - 5;
+        mouseY = -(event.clientY / window.innerHeight) * 5 + 2;
+    });
+
+    window.addEventListener("resize", () => {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+    });
+
+    init();
+</script>
+</body>
+</html>
