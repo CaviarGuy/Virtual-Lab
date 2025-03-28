@@ -6,76 +6,125 @@
     <title>Velocity vs Time Graph</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        canvas { max-width: 600px; margin: 20px auto; }
-        input { width: 60px; margin: 5px; }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        input {
+            margin: 5px;
+            padding: 5px;
+            width: 60px;
+        }
+        button {
+            padding: 8px 15px;
+            margin-top: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .graph-container {
+            width: 80%;
+            margin: auto;
+        }
+        canvas {
+            width: 100% !important;
+            height: 450px !important;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+        }
     </style>
 </head>
 <body>
+
     <h2>Velocity vs Time Graph</h2>
-    <p>Enter 5 velocity values:</p>
-    <input type="number" id="v1"> 
-    <input type="number" id="v2"> 
-    <input type="number" id="v3"> 
-    <input type="number" id="v4"> 
-    <input type="number" id="v5"> 
+    <p>Enter velocity values (m/s) at 5 different time points (seconds apart).</p>
+
+    <label>Time Intervals: 0s, 1s, 2s, 3s, 4s</label><br><br>
+    <input type="number" id="v1" placeholder="v1">
+    <input type="number" id="v2" placeholder="v2">
+    <input type="number" id="v3" placeholder="v3">
+    <input type="number" id="v4" placeholder="v4">
+    <input type="number" id="v5" placeholder="v5">
+    
     <br><br>
     <button onclick="plotGraph()">Plot Graph</button>
-    <canvas id="velocityChart"></canvas>
     
+    <br><br>
+    <div class="graph-container">
+        <canvas id="velocityChart"></canvas>
+    </div>
+
     <script>
+        let velocityChart; // Store chart instance globally
+
         function plotGraph() {
             let v1 = parseFloat(document.getElementById("v1").value);
             let v2 = parseFloat(document.getElementById("v2").value);
             let v3 = parseFloat(document.getElementById("v3").value);
             let v4 = parseFloat(document.getElementById("v4").value);
             let v5 = parseFloat(document.getElementById("v5").value);
-            
+
+            if (isNaN(v1) || isNaN(v2) || isNaN(v3) || isNaN(v4) || isNaN(v5)) {
+                alert("Please enter all velocity values.");
+                return;
+            }
+
             let velocities = [v1, v2, v3, v4, v5];
-            let times = [1, 2, 3, 4, 5];
-            
-            let increasing = true;
-            let decreasing = true;
-            
-            for (let i = 0; i < velocities.length - 1; i++) {
-                if (velocities[i] < velocities[i + 1]) {
-                    decreasing = false;
-                } else if (velocities[i] > velocities[i + 1]) {
-                    increasing = false;
-                }
+            let times = [0, 1, 2, 3, 4];
+
+            // Calculate Average Acceleration: (final velocity - initial velocity) / time
+            let avgAcceleration = (v5 - v1) / (times.length - 1);
+
+            let trend = "constant";
+            if (v5 > v1) {
+                trend = "increasing";
+            } else if (v5 < v1) {
+                trend = "decreasing";
             }
-            
-            if (increasing) {
-                alert("Velocity is increasing.");
-            } else if (decreasing) {
-                alert("Velocity is decreasing.");
-            } else {
-                alert("Velocity fluctuates.");
+
+            // Display result in an alert
+            alert(`Velocity is ${trend}. Average Acceleration: ${avgAcceleration.toFixed(2)} m/s²`);
+
+            // Destroy previous chart instance if it exists
+            if (velocityChart) {
+                velocityChart.destroy();
             }
-            
-            let ctx = document.getElementById('velocityChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
+
+            // Draw the graph
+            let ctx = document.getElementById("velocityChart").getContext("2d");
+            velocityChart = new Chart(ctx, {
+                type: "line",
                 data: {
                     labels: times,
                     datasets: [{
-                        label: 'Velocity (m/s)',
+                        label: "Velocity (m/s)",
                         data: velocities,
-                        borderColor: 'blue',
+                        borderColor: "blue",
                         borderWidth: 2,
                         fill: false,
-                        tension: 0.3
+                        pointRadius: 5,
+                        pointBackgroundColor: "red"
                     }]
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     scales: {
-                        x: { title: { display: true, text: 'Time (s)' } },
-                        y: { title: { display: true, text: 'Velocity (m/s)' } }
+                        x: { title: { display: true, text: "Time (s)" } },
+                        y: { title: { display: true, text: "Velocity (m/s)" } }
                     }
                 }
             });
         }
     </script>
+
 </body>
 </html>
+
