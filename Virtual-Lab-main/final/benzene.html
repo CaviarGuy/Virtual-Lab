@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benzene Molecule - Resonance Effect</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f7f7f7;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+        }
+        #benzene {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            transform: scale(1);
+            transition: transform 1s ease-in-out;
+            z-index: 1;
+        }
+        .hexagon {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        /* Single Bonds */
+        .bond {
+            width: 10px;
+            height: 50%;
+            background-color: #000;
+            position: absolute;
+        }
+        .bond1 { transform: rotate(0deg); }
+        .bond2 { transform: rotate(120deg); }
+        .bond3 { transform: rotate(240deg); }
+        /* Double Bonds */
+        .double-bond {
+            width: 20px;
+            height: 4px;
+            background-color: #ff6347;
+            position: absolute;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .double-bond1 { transform: rotate(60deg); }
+        .double-bond2 { transform: rotate(180deg); }
+        .double-bond3 { transform: rotate(300deg); }
+
+        .carbon-atom {
+            position: absolute;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .hydrogen-atom {
+            position: absolute;
+            font-size: 12px;
+            color: #777;
+        }
+
+        #show-resonance-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #show-resonance-btn:hover {
+            background-color: #45a049;
+        }
+
+        .resonance-effect {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 18px;
+            color: #ff6347;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .highlight {
+            box-shadow: 0 0 10px rgba(255, 99, 71, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Benzene Molecule - Resonance Effect</h1>
+        <div id="benzene">
+            <div class="hexagon">
+                <!-- Single Bonds -->
+                <div class="bond bond1"></div>
+                <div class="bond bond2"></div>
+                <div class="bond bond3"></div>
+
+                <!-- Double Bonds -->
+                <div class="double-bond double-bond1"></div>
+                <div class="double-bond double-bond2"></div>
+                <div class="double-bond double-bond3"></div>
+
+                <!-- Carbon atoms (C) at each corner -->
+                <div class="carbon-atom" style="top: 10%; left: 50%;">C</div>
+                <div class="carbon-atom" style="top: 25%; left: 90%;">C</div>
+                <div class="carbon-atom" style="top: 75%; left: 90%;">C</div>
+                <div class="carbon-atom" style="top: 90%; left: 50%;">C</div>
+                <div class="carbon-atom" style="top: 75%; left: 10%;">C</div>
+                <div class="carbon-atom" style="top: 25%; left: 10%;">C</div>
+
+                <!-- Hydrogen atoms (H) attached to each carbon -->
+                <div class="hydrogen-atom" style="top: 0%; left: 50%;">H</div>
+                <div class="hydrogen-atom" style="top: 25%; left: 100%;">H</div>
+                <div class="hydrogen-atom" style="top: 75%; left: 100%;">H</div>
+                <div class="hydrogen-atom" style="top: 100%; left: 50%;">H</div>
+                <div class="hydrogen-atom" style="top: 75%; left: 0%;">H</div>
+                <div class="hydrogen-atom" style="top: 25%; left: 0%;">H</div>
+            </div>
+        </div>
+        <button id="show-resonance-btn">Show Resonance Effect</button>
+
+        <!-- External chemical effect visualization -->
+        <div class="resonance-effect" id="chemical-effect">
+            Resonance effect is now active! The electron cloud becomes delocalized and the bond strengths are equalized.
+        </div>
+    </div>
+
+    <script>
+        const button = document.getElementById('show-resonance-btn');
+        const benzeneMolecule = document.getElementById('benzene');
+        const doubleBonds = document.querySelectorAll('.double-bond');
+        const resonanceEffect = document.getElementById('chemical-effect');
+        const bonds = document.querySelectorAll('.bond');
+
+        let isResonanceActive = false;
+
+        button.addEventListener('click', () => {
+            if (!isResonanceActive) {
+                // Zoom in and simulate resonance
+                benzeneMolecule.style.transform = "scale(1.5)";  // Zoom effect
+                bonds.forEach(bond => bond.classList.add('highlight'));
+                doubleBonds.forEach((bond, index) => {
+                    bond.style.opacity = 0;
+                    // Simulate the resonance by showing alternating bonds
+                    setTimeout(() => {
+                        bond.style.opacity = 1;
+                    }, index * 500);
+                });
+
+                // Show external chemical effect message
+                resonanceEffect.style.opacity = 1;
+
+                // Change the button text
+                button.textContent = "Hide Resonance Effect";
+                isResonanceActive = true;
+            } else {
+                // Reset to normal state
+                benzeneMolecule.style.transform = "scale(1)";
+                doubleBonds.forEach(bond => bond.style.opacity = 0);
+                bonds.forEach(bond => bond.classList.remove('highlight'));
+
+                // Hide external chemical effect message
+                resonanceEffect.style.opacity = 0;
+
+                // Change the button text back
+                button.textContent = "Show Resonance Effect";
+                isResonanceActive = false;
+            }
+        });
+    </script>
+</body>
+</html>

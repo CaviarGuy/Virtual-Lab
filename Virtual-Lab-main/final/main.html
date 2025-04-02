@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Lab</title>
+    <style>
+        /* Global Reset and Base Styling */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%; /* Ensure the full height is used */
+    display: flex;
+    flex-direction: column; /* Align content vertically */
+}
+
+body {
+    font-family: 'Helvetica Neue', sans-serif;
+    line-height: 1.7;
+    color: #333;
+    font-size: 18px;
+    padding: 0;
+    background: linear-gradient(to right, #aaccee, #aaccee);
+}
+
+/* Header Section */
+header {
+    position: relative;
+    color: white;
+    text-align: center;
+    padding: 80px 0;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+header video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    opacity: 1;
+}
+
+header h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    transition: color 0.4s ease;
+}
+
+header h1:hover {
+    color: #ffffff;
+}
+
+header p {
+    font-size: 1.2rem;
+    color: #eceff1;
+    margin-top: 10px;
+    font-weight: 400;
+}
+
+/* Navigation Bar */
+nav {
+    display: flex;
+    justify-content: center;
+    background-color: #308fce;
+    padding: 15px 0;
+    margin-bottom: 40px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #000000;
+    padding: 12px 20px;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    margin: 0 20px;
+    border-radius: 50px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+nav a:hover {
+    background-color: #000000;
+    color: white;
+}
+
+/* Main Content Grid */
+/* Main Content Section */
+.container {
+    position: relative;
+    display: flex; /* Flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    width: 100%;
+    height: calc(100vh - 180px); /* Adjust height to fill the space between header and footer */
+    
+    gap: 40px;
+    flex-wrap: wrap; /* Allow wrapping if the screen is too narrow */
+    z-index: 1; /* Ensure content is above the video */
+}
+
+/* Individual Section Styling */
+.section {
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    max-width: 400px; /* Limit the max width of the section */
+    position: relative;
+    z-index: 1; /* Ensure sections stay above the video */
+}
+
+.section:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+
+.section h2 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #2d3436;
+    margin-bottom: 20px;
+}
+
+.section p {
+    color: #636e72;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+.cta-button {
+    background-color: #0984e3;
+    color: white;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: #74b9ff;
+    transform: translateY(-5px);
+}
+
+.cta-button:active {
+    transform: translateY(2px);
+}
+
+/* Footer Styling */
+footer {
+    background-color: #2d3436;
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.1);
+    margin-top: auto; /* Push the footer to the bottom */
+}
+
+footer p {
+    font-size: 1.2rem;
+    color: #b2bec3;
+}
+
+footer a {
+    color: #0984e3;
+    font-size: 1.3rem;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        font-size: 16px;
+    }
+
+    header h1 {
+        font-size: 2.5rem;
+    }
+
+    .container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .section {
+        width: 80%;
+        padding: 25px;
+    }
+
+    nav {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px 0;
+    }
+
+    nav a {
+        margin: 10px 0;
+        padding: 10px;
+    }
+
+    footer p {
+        font-size: 1.1rem;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <!-- Background Video -->
+        <video autoplay muted loop >
+            <source src="VID1.MP4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <h1>Welcome to the Science Lab</h1>
+        <p>Your gateway to the world of science and experiments.</p>
+    </header>
+
+    <!-- Navigation Section -->
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">Physics</a>
+        <a href="#">Chemistry</a>
+        <a href="#">Contact</a>
+    </nav>
+
+    <!-- Main Content Section -->
+    <div class="container">
+        <!-- Physics Section -->
+        <div class="section">
+            <h2>Physics</h2>
+            <p>Explore the mysteries of the universe with hands-on experiments.</p>
+            <a href="physics.html" class="cta-button">Go to Physics Lab</a>
+        </div>
+
+        <!-- Chemistry Section -->
+        <div class="section">
+            <h2>Chemistry</h2>
+            <p>Discover chemical reactions and their fascinating outcomes.</p>
+            <a href="chemistry.html" class="cta-button">Go to Chemistry Lab</a>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2025 Science Lab. All Rights Reserved.</p>
+        <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+    </footer>
+
+</body>
+</html>

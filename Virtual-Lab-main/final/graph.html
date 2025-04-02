@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Velocity vs Time Graph</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f7fb;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            color: #2e3d4c;
+            margin-top: 30px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #555;
+            margin-top: 10px;
+        }
+
+        label {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        input {
+            margin: 8px;
+            padding: 10px;
+            width: 80px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        button {
+            padding: 12px 25px;
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .graph-container {
+            width: 80%;
+            margin: 30px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 450px !important;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+
+        .input-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .input-container input {
+            margin: 10px;
+        }
+
+        .alert {
+            display: none;
+            margin: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            font-size: 1rem;
+        }
+
+        .alert.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Velocity vs Time Graph</h2>
+    <p>Enter velocity values (m/s) at 5 different time points (seconds apart).</p>
+
+    <div class="input-container">
+        <input type="number" id="v1" placeholder="v1">
+        <input type="number" id="v2" placeholder="v2">
+        <input type="number" id="v3" placeholder="v3">
+        <input type="number" id="v4" placeholder="v4">
+        <input type="number" id="v5" placeholder="v5">
+    </div>
+
+    <br>
+    <button onclick="plotGraph()">Plot Graph</button>
+    
+    <div class="alert" id="alert"></div>
+
+    <div class="graph-container">
+        <canvas id="velocityChart"></canvas>
+    </div>
+
+    <script>
+        let velocityChart; // Store chart instance globally
+
+        function plotGraph() {
+            let v1 = parseFloat(document.getElementById("v1").value);
+            let v2 = parseFloat(document.getElementById("v2").value);
+            let v3 = parseFloat(document.getElementById("v3").value);
+            let v4 = parseFloat(document.getElementById("v4").value);
+            let v5 = parseFloat(document.getElementById("v5").value);
+
+            if (isNaN(v1) || isNaN(v2) || isNaN(v3) || isNaN(v4) || isNaN(v5)) {
+                document.getElementById("alert").classList.add("show");
+                document.getElementById("alert").innerText = "Please enter all velocity values.";
+                return;
+            }
+
+            let velocities = [v1, v2, v3, v4, v5];
+            let times = [0, 1, 2, 3, 4];
+
+            // Calculate Average Acceleration: (final velocity - initial velocity) / time
+            let avgAcceleration = (v5 - v1) / (times.length - 1);
+
+            let trend = "constant";
+            if (v5 > v1) {
+                trend = "increasing";
+            } else if (v5 < v1) {
+                trend = "decreasing";
+            }
+
+            // Display result in an alert
+            alert(`Velocity is ${trend}. Average Acceleration: ${avgAcceleration.toFixed(2)} m/s²`);
+
+            // Destroy previous chart instance if it exists
+            if (velocityChart) {
+                velocityChart.destroy();
+            }
+
+            // Draw the graph
+            let ctx = document.getElementById("velocityChart").getContext("2d");
+            velocityChart = new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: times,
+                    datasets: [{
+                        label: "Velocity (m/s)",
+                        data: velocities,
+                        borderColor: "#007bff",
+                        borderWidth: 2,
+                        fill: false,
+                        pointRadius: 5,
+                        pointBackgroundColor: "#ff4d4d"
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { title: { display: true, text: "Time (s)" } },
+                        y: { title: { display: true, text: "Velocity (m/s)" } }
+                    },
+                    plugins: {
+                        legend: {
+                            position: "top",
+                            labels: {
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Clear any previous alert message
+            document.getElementById("alert").classList.remove("show");
+        }
+    </script>
+
+</body>
+</html>
