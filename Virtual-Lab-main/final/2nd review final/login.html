@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login Page</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background: url('wp10912448.jpg') no-repeat center center / cover;
+    }
+
+    video.bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .login-container {
+      background-color: rgba(255, 255, 255, 0.7); /* Glass effect */
+      padding: 40px 60px;
+      border-radius: 25px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2), 0 6px 18px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      text-align: center;
+      z-index: 1;
+      max-width: 420px;
+      width: 100%;
+    }
+
+    h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.5em;
+      color: #00796b;
+      margin-bottom: 30px;
+    }
+
+    .input-group {
+      margin: 15px 0;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #00796b;
+      border-radius: 8px;
+      font-size: 1em;
+      outline: none;
+      background-color: rgba(240, 248, 255, 0.8);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .input-group input:focus {
+      border-color: #004d40;
+      box-shadow: 0 0 8px rgba(0, 77, 64, 0.5);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #00796b;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      font-size: 1.1em;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    button:hover {
+      background-color: #004d40;
+      transform: translateY(-3px);
+    }
+
+    button:active {
+      transform: translateY(1px);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .error-message {
+      color: red;
+      margin-top: 10px;
+      display: none;
+    }
+
+    @media (max-width: 480px) {
+      .login-container {
+        padding: 30px;
+        width: 90%;
+      }
+
+      h2 {
+        font-size: 2rem;
+      }
+
+      button {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Video -->
+  <video class="bg-video" autoplay muted loop>
+    <source src="VID1.MP4" type="video/mp4" />
+  </video>
+
+  <!-- Login Form -->
+  <div class="login-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <div class="input-group">
+        <input type="text" id="userid" placeholder="User ID" required>
+      </div>
+      <div class="input-group">
+        <input type="text" id="username" placeholder="Username" required>
+      </div>
+      <div class="input-group">
+        <input type="password" id="password" placeholder="Password" required>
+      </div>
+      <button type="submit">Login</button>
+      <p class="error-message" id="error-message">Wrong credentials. Please try again.</p>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const userId = document.getElementById('userid').value;
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorMessage = document.getElementById('error-message');
+
+      try {
+        const response = await fetch('http://localhost:4000/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userid: userId, username: username, password: password })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          alert('Login successful');
+          window.location.href = 'main.html';
+        } else {
+          errorMessage.style.display = 'block';
+          errorMessage.textContent = result.message;
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        errorMessage.style.display = 'block';
+        errorMessage.textContent = 'Server error. Please try again later.';
+      }
+    });
+  </script>
+
+</body>
+</html>

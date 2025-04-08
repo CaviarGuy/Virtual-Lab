@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Science Lab - Comic Style</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Luckiest Guy', cursive;
+  background: radial-gradient(circle, #ffe600 0%, #f39c12 100%);
+  color: #111;
+  overflow-x: hidden;
+  zoom: 118.7%;
+}
+
+header {
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0,0,0,0.6)),
+  url("wp10912448.jpg") center center/cover no-repeat;
+  padding: 60px 20px 30px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+header h1 {
+  font-size: 5rem;
+  color: #ff2d2d;
+  text-shadow: 3px 3px 0 #000, 6px 6px 0 #fff;
+  letter-spacing: 2px;
+  font-family: 'Bangers', cursive;
+}
+
+header p {
+  font-size: 1.5rem;
+  color: #fff200;
+  text-shadow: 1px 1px #000;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  background-color: #000;
+  padding: 15px 0;
+  gap: 40px;
+}
+
+nav a {
+  color: #fff200;
+  font-size: 1.2rem;
+  text-decoration: none;
+  transition: transform 0.2s;
+}
+
+nav a:hover {
+  transform: scale(1.2);
+  color: #ff2d2d;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  padding: 60px 20px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+
+.section {
+  background-color: #ffffff;
+  border: 6px solid #000;
+  border-radius: 25px;
+  width: 320px;
+  text-align: center;
+  padding: 30px 20px;
+  box-shadow: 10px 10px 0 #ff2d2d;
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.section:hover {
+  transform: scale(1.05);
+}
+
+.section h2 {
+  font-size: 2rem;
+  color: #ff2d2d;
+  text-shadow: 2px 2px #000;
+  margin-bottom: 15px;
+  font-family: 'Bangers', cursive;
+}
+
+.section p {
+  font-size: 1rem;
+  color: #222;
+  margin-bottom: 20px;
+}
+
+.cta-button {
+  background-color: #ff2d2d;
+  color: white;
+  font-size: 1.1rem;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 4px 4px 0 #000;
+  transition: all 0.2s ease;
+}
+
+.cta-button:hover {
+  background-color: #d41b1b;
+  transform: translateY(-3px);
+}
+
+footer {
+  background-color: #000;
+  color: #fff200;
+  text-align: center;
+  padding: 25px 20px;
+  font-size: 1rem;
+}
+
+footer a {
+  color: #ff2d2d;
+  margin: 0 10px;
+  text-decoration: none;
+}
+
+.burst {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+                    radial-gradient(circle, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 3rem;
+  }
+
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .section {
+    width: 90%;
+  }
+
+  nav {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+</style>
+</head>
+<body>
+<div class="burst"></div>
+
+<header>
+  <h1>SCIENCE LAB!</h1>
+  <p>Experiments so fun... you'll EXPLODE with curiosity!</p>
+</header>
+
+<nav>
+  <a href="#">Home</a>
+  <a href="#">Physics</a>
+  <a href="#">Chemistry</a>
+  <a href="#">Contact</a>
+</nav>
+
+<div class="container">
+  <div class="section">
+    <h2>PHYSICS</h2>
+    <p>Smash atoms, fly rockets, and bend the universe.</p>
+    <a href="physics.html" class="cta-button">Boom! Physics!</a>
+  </div>
+  <div class="section">
+    <h2>CHEMISTRY</h2>
+    <p>Mix, bubble, and blast through chemical reactions!</p>
+    <a href="chemistry.html" class="cta-button">Zap! Chemistry!</a>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2025 Science Lab. Kaboom Rights Reserved.</p>
+  <a href="#">Privacy Policy</a> | <a href="#">Terms</a>
+</footer>
+</body>
+</html>

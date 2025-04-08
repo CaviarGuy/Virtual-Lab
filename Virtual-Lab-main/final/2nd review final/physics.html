@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Physics Lab</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Bangers&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Luckiest Guy', cursive;
+      zoom: 125%;
+      color: #111;
+      text-align: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Image Background Layer */
+    .bg-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('wp10912448.jpg') center center / cover no-repeat;
+      z-index: -3;
+      opacity: 0.8;
+    }
+
+    /* Background Video */
+    video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+      opacity: 0.8;
+      mix-blend-mode: multiply;
+    }
+
+    /* Comic Burst Overlay */
+    .burst {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.3) 1px, transparent 1px),
+                        radial-gradient(circle, rgba(0,0,0,0.1) 1px, transparent 1px);
+      background-size: 20px 20px;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .container {
+      background-color: rgba(255, 255, 255, 0.85);
+      border: 6px solid #000;
+      border-radius: 25px;
+      box-shadow: 10px 10px 0 #ff0000;
+      padding: 50px 40px;
+      max-width: 800px;
+      margin: auto;
+      margin-top: 10vh;
+      backdrop-filter: blur(10px);
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      color: #ff2d2d;
+      text-shadow: 3px 3px 0 #000, 5px 5px 0 #fff;
+      font-family: 'Bangers', cursive;
+      margin-bottom: 30px;
+    }
+
+    a {
+      display: inline-block;
+      text-decoration: none;
+      font-size: 1.3rem;
+      color: white;
+      background-color: #ff2d2d;
+      padding: 14px 28px;
+      border-radius: 50px;
+      margin: 15px;
+      min-width: 220px;
+      box-shadow: 4px 4px 0 #000;
+      transition: all 0.25s ease-in-out;
+    }
+
+    a:hover {
+      background-color: #d41b1b;
+      color: #fff;
+      transform: translateY(-5px);
+      box-shadow: 6px 6px 0 #000;
+    }
+
+    a:active {
+      transform: translateY(2px);
+      box-shadow: 2px 2px 0 #000;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+      .container {
+        padding: 30px;
+        width: 90%;
+      }
+      a {
+        font-size: 1.1rem;
+        padding: 12px 22px;
+        min-width: 180px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2rem;
+      }
+      a {
+        font-size: 1rem;
+        padding: 10px 18px;
+        min-width: 160px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Static Background Image -->
+  <div class="bg-image"></div>
+
+  <!-- Background Video -->
+  <video autoplay muted loop>
+    <source src="VID1.MP4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <!-- Comic Burst Overlay -->
+  <div class="burst"></div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h1>Welcome to the Physics Lab</h1>
+    <div>
+      <a href="prismlib.html">🔬 Prism Experiment</a>
+      <a href="pendulum.html">🕰️ Pendulum Experiment</a>
+      <a href="graph.html">📈 Graph Experiment</a>
+    </div>
+  </div>
+
+</body>
+</html>
