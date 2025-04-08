@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Virtual Labs Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .question-block {
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    .question-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .submit-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    .score-section {
+      margin-top: 30px;
+      border-top: 2px solid #000;
+      padding-top: 20px;
+    }
+    .topic-title {
+      font-size: 18px;
+      margin-top: 15px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+    <h1>Hello, <span id="username"></span>!</h1>
+
+  <div id="quiz-container"></div>
+  <button class="submit-btn" onclick="submitQuiz()">Submit</button>
+
+  <div class="score-section" id="score-section" style="display:none;">
+    <h2>Your Scores</h2>
+    <div id="scores"></div>
+        <!-- Recommendation Button -->
+        <a id="recommend-button" href="#" target="_blank">
+          <button type="button">Get Lab Recommendations</button>
+        </a>
+        <!-- Histogram Button -->
+        <a href="http://127.0.0.1:5002/histogram" target="_blank">
+        <button type="button">View Score Histogram</button>
+         </a>
+         <a href="main.html">
+        <button type="button">Go to Main Page</button>
+         </a>
+
+
+      
+  </div>
+
+  <script>
+        // Extract username from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+    const username = urlParams.get("username");
+    document.getElementById("username").textContent = username;
+    let quizData = [];
+   
+    document.getElementById("username").textContent = username;
+    const recommendButton = document.getElementById("recommend-button");
+    if (recommendButton && username) {
+        recommendButton.href = `http://127.0.0.1:5001/recommend?username=${encodeURIComponent(username)}`;
+    }
+    
+
+
+    async function loadQuiz() {
+      const response = await fetch('/get_quiz');
+      quizData = await response.json();
+      const container = document.getElementById('quiz-container');
+
+      quizData.forEach((q, index) => {
+        const qBlock = document.createElement('div');
+        qBlock.className = 'question-block';
+
+        const title = document.createElement('div');
+        title.className = 'question-title';
+        title.innerText = `${index + 1}. [${q.category}] ${q.question}`;
+        qBlock.appendChild(title);
+
+        q.options.forEach(opt => {
+          const label = document.createElement('label');
+          label.style.display = 'block';
+
+          const input = document.createElement('input');
+          input.type = 'radio';
+          input.name = `q${index}`;
+          input.value = opt;
+
+          label.appendChild(input);
+          label.append(` ${opt}`);
+          qBlock.appendChild(label);
+        });
+
+        container.appendChild(qBlock);
+      });
+    }
+
+    async function submitQuiz() {
+      const answers = {};
+      quizData.forEach((q, index) => {
+        const selected = document.querySelector(`input[name="q${index}"]:checked`);
+        if (selected) {
+          answers[`q${index}`] = selected.value;
+        }
+      });
+
+      const response = await fetch('/submit_quiz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, answers })
+      });
+
+      const result = await response.json();
+      displayScores(result);
+    }
+
+    function displayScores(result) {
+      const section = document.getElementById('score-section');
+      const scoresDiv = document.getElementById('scores');
+      section.style.display = 'block';
+      scoresDiv.innerHTML = '';
+
+      for (let topic in result) {
+        const p = document.createElement('p');
+        p.className = 'topic-title';
+        p.innerText = `${topic} Score: ${result[topic]} / 6`;
+        scoresDiv.appendChild(p);
+      }
+    }
+
+    loadQuiz();
+  </script>
+</body>
+</html>
